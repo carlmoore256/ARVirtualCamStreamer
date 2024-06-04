@@ -8,7 +8,7 @@
 import Foundation
 import WebRTC
 
-class SignalingClientSessionModel: SignalingClientDelegate, ObservableObject {
+class SignalingClientSession: SignalingClientDelegate, ObservableObject {
     let webRTCClient: WebRTCClient
     let signalingClient: SignalingClient
     

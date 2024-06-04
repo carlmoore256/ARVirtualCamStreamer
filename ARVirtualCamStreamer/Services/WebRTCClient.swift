@@ -8,6 +8,7 @@
 
 import Foundation
 import WebRTC
+import DataCompression
 
 protocol WebRTCClientDelegate: AnyObject {
     func webRTCClient(_ client: WebRTCClient, didDiscoverLocalCandidate candidate: RTCIceCandidate)
@@ -42,6 +43,11 @@ struct LocalRTCVideoTrack: ActiveRTCVideoTrack {
         self.source = source
         self.capturer = capturer
     }
+    
+    // sends a single video frame
+    func feedFrame(pixelBuffer: CVPixelBuffer, timeStamp: CMTime, fps: Int32 = Int32(kFrameRate)) {
+        capturer.capture(pixelBuffer: pixelBuffer, timeStamp: timeStamp, fps: fps)
+    }
 }
 
 struct RemoteRTCVideoTrack: ActiveRTCVideoTrack {
@@ -59,9 +65,18 @@ class ActiveRTCDataChannel : Identifiable, Equatable  {
     let id: String = UUID().uuidString
     let label: String
     let channel: RTCDataChannel
-    var delegate: RTCDataChannelDelegate?
-    let isLocal: Bool
     
+    private var _delegate: RTCDataChannelDelegate?
+    
+    var delegate: RTCDataChannelDelegate? {
+        get { return _delegate }
+        set {
+            self.channel.delegate = newValue
+            self._delegate = newValue
+        }
+    }
+    
+    let isLocal: Bool
     
     init(channel: RTCDataChannel, isLocal: Bool) {
         self.channel = channel
@@ -72,9 +87,9 @@ class ActiveRTCDataChannel : Identifiable, Equatable  {
     init(channel: RTCDataChannel, isLocal: Bool, delegate: RTCDataChannelDelegate?) {
         self.channel = channel
         self.isLocal = isLocal
-        self.delegate = delegate
-        self.channel.delegate = self.delegate
         self.label = channel.label
+        self.delegate = delegate
+       
     }
     
     func setDelegate(delegate: RTCDataChannelDelegate) {
@@ -82,6 +97,10 @@ class ActiveRTCDataChannel : Identifiable, Equatable  {
         channel.delegate = delegate
     }
     
+    func sendData(_ data: Data, compress: Bool = true) {
+        let buffer = RTCDataBuffer(data: data, isBinary: true)
+        channel.sendData(buffer)
+    }
     
     static func == (lhs: ActiveRTCDataChannel, rhs: ActiveRTCDataChannel) -> Bool {
         lhs.id == rhs.id
@@ -123,7 +142,6 @@ final class WebRTCClient: NSObject, ObservableObject {
         self.streamId = streamId
         self.peerConnection = WebRTCClient.createPeerConnection(iceServers: iceServers)
         super.init()
-        self.createMediaSenders()
         self.peerConnection.delegate = self
         
     }
@@ -141,7 +159,6 @@ final class WebRTCClient: NSObject, ObservableObject {
     
     func reinitializeConnection() {
         self.peerConnection = WebRTCClient.createPeerConnection(iceServers: iceServers)
-        self.createMediaSenders()
         self.peerConnection.delegate = self
     }
     
@@ -245,29 +262,20 @@ final class WebRTCClient: NSObject, ObservableObject {
         localVideoTracks.removeAll()
         peerConnection.close()
     }
+
     
-    private func createMediaSenders() {
-        self.createLocalVideoTrack(trackId: "color")
-        createDataChannel(label: "depth")
-    }
-    
-    private func createLocalVideoTrack(trackId: String) {
+    func createLocalVideoTrack(trackId: String) -> LocalRTCVideoTrack? {
         let videoSource = WebRTCClient.factory.videoSource()
         let videoTrack = WebRTCClient.factory.videoTrack(with: videoSource, trackId: trackId)
         let videoCapturer = FrameVideoCapturer(videoSource: videoSource)
-        self.localVideoTracks[trackId] = LocalRTCVideoTrack(track: videoTrack, source: videoSource, capturer: videoCapturer)
+        let track = LocalRTCVideoTrack(track: videoTrack, source: videoSource, capturer: videoCapturer)
+        self.localVideoTracks[trackId] = track
         self.peerConnection.add(videoTrack, streamIds: [self.streamId])
+        return track
     }
     
-    func feedFrameToVideoTrack(pixelBuffer: CVPixelBuffer, timeStamp: CMTime, trackId: String, fps: Int32 = Int32(kFrameRate)) {
-        guard let activeVideoTrack = self.localVideoTracks[trackId] else {
-            debugPrint("No video track found with id \(trackId)")
-            return
-        }
-        activeVideoTrack.capturer.capture(pixelBuffer: pixelBuffer, timeStamp: timeStamp, fps: fps)
-    }
     
-    func createDataChannel(label: String) {
+    func createDataChannel(label: String) -> ActiveRTCDataChannel? {
         let config = RTCDataChannelConfiguration()
         config.isOrdered = true  // Ensures data is received in the order it was sent
         config.isNegotiated = false  // Let WebRTC negotiate the channel automatically
@@ -276,8 +284,10 @@ final class WebRTCClient: NSObject, ObservableObject {
             let activeDataChannel = ActiveRTCDataChannel(channel: dataChannel, isLocal: true, delegate: DataChannelDelegate())
             self.localDataChannels[label] = activeDataChannel
             print("Data Channel created successfully.")
+            return activeDataChannel
         } else {
             print("Warning: Couldn't create data channel.")
+            return nil
         }
     }
     

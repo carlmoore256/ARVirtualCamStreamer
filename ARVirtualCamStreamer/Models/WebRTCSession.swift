@@ -9,7 +9,7 @@ import Foundation
 import WebRTC
 import Combine
 
-class WebRTCSessionModel: WebRTCClientDelegate, ObservableObject {
+class WebRTCSession: WebRTCClientDelegate, ObservableObject {
     let webRTCClient: WebRTCClient
     let signalingClient: SignalingClient
     

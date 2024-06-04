@@ -9,6 +9,7 @@ import Foundation
 import VideoToolbox
 import Accelerate
 import CoreVideo
+import MetalKit
 
 extension CVPixelBuffer {
     func toCGImage() -> CGImage? {
@@ -16,6 +17,94 @@ extension CVPixelBuffer {
         VTCreateCGImageFromCVPixelBuffer(self, options: nil, imageOut: &cgImage)
         return cgImage
     }
+    
+    func packageWithMetadata() -> Data {
+        CVPixelBufferLockBaseAddress(self, .readOnly)
+        defer { CVPixelBufferUnlockBaseAddress(self, .readOnly) }
+        let width = CVPixelBufferGetWidth(self)
+        let height = CVPixelBufferGetHeight(self)
+        let pixelFormat = CVPixelBufferGetPixelFormatType(self)
+        let bytesPerRow = CVPixelBufferGetBytesPerRow(self)
+        let baseAddress = CVPixelBufferGetBaseAddress(self)!
+        let metadataSize = MemoryLayout<Int32>.size * 4 // 4 Int32 values
+        let totalSize = metadataSize + bytesPerRow * height
+        var data = Data(count: totalSize)
+        data.withUnsafeMutableBytes { pointer in
+            pointer.storeBytes(of: Int32(width.littleEndian), as: Int32.self)
+            pointer.storeBytes(of: Int32(height.littleEndian), toByteOffset: 4, as: Int32.self)
+            pointer.storeBytes(of: pixelFormat.littleEndian, toByteOffset: 8, as: OSType.self)
+            pointer.storeBytes(of: Int32(bytesPerRow.littleEndian), toByteOffset: 12, as: Int32.self)
+        }
+        data.replaceSubrange(metadataSize..<totalSize, with: Data(bytes: baseAddress, count: bytesPerRow * height))
+        return data
+    }
+    
+    
+    func normalize(from minRange: Float, to maxRange: Float, targetMin: Float, targetMax: Float) {
+        CVPixelBufferLockBaseAddress(self, .readOnly)
+        defer { CVPixelBufferUnlockBaseAddress(self, .readOnly) }
+        
+        guard let baseAddress = CVPixelBufferGetBaseAddress(self) else { return }
+        let width = CVPixelBufferGetWidth(self)
+        let height = CVPixelBufferGetHeight(self)
+        let pixelFormat = CVPixelBufferGetPixelFormatType(self)
+        
+        switch pixelFormat {
+        case kCVPixelFormatType_32BGRA:
+            let buffer = baseAddress.assumingMemoryBound(to: UInt8.self)
+            var floatBuffer = [Float](repeating: 0, count: width * height * 4)
+            vDSP_vfltu8(buffer, 1, &floatBuffer, 1, vDSP_Length(floatBuffer.count))
+            scaleFloatBuffer(&floatBuffer, from: minRange, to: maxRange, targetMin: targetMin, targetMax: targetMax)
+            vDSP_vfixu8(floatBuffer, 1, buffer, 1, vDSP_Length(floatBuffer.count))
+            
+        case kCVPixelFormatType_OneComponent8:
+            let buffer = baseAddress.assumingMemoryBound(to: UInt8.self)
+            var floatBuffer = [Float](repeating: 0, count: width * height)
+            vDSP_vfltu8(buffer, 1, &floatBuffer, 1, vDSP_Length(floatBuffer.count))
+            scaleFloatBuffer(&floatBuffer, from: minRange, to: maxRange, targetMin: targetMin, targetMax: targetMax)
+            vDSP_vfixu8(floatBuffer, 1, buffer, 1, vDSP_Length(floatBuffer.count))
+            
+        case kCVPixelFormatType_OneComponent16:
+            let buffer = baseAddress.assumingMemoryBound(to: UInt16.self)
+            var floatBuffer = [Float](repeating: 0, count: width * height)
+            vDSP_vfltu16(buffer, 1, &floatBuffer, 1, vDSP_Length(floatBuffer.count))
+            scaleFloatBuffer(&floatBuffer, from: minRange, to: maxRange, targetMin: targetMin, targetMax: targetMax)
+            vDSP_vfixu16(floatBuffer, 1, buffer, 1, vDSP_Length(floatBuffer.count))
+            
+        case kCVPixelFormatType_DepthFloat16:
+            var buffer = baseAddress.assumingMemoryBound(to: UInt16.self)
+           normalizeFloat16Buffer(&buffer, count: width * height, from: minRange, to: maxRange, targetMin: targetMin, targetMax: targetMax)
+            
+        case kCVPixelFormatType_32ARGB, kCVPixelFormatType_64ARGB:
+            // Handle other pixel formats if necessary
+            print("Pixel format not supported yet")
+            
+        default:
+            print("Unsupported pixel format: \(pixelFormat)")
+        }
+    }
+}
+
+private func normalizeFloat16Buffer(_ buffer: inout UnsafeMutablePointer<UInt16>, count: Int, from minRange: Float, to maxRange: Float, targetMin: Float, targetMax: Float) {
+       // Convert Float16 to Float
+       var floatBuffer = [Float](repeating: 0, count: count)
+       var srcBuffer = vImage_Buffer(data: buffer, height: 1, width: vImagePixelCount(count), rowBytes: count * MemoryLayout<UInt16>.size)
+       var dstBuffer = vImage_Buffer(data: &floatBuffer, height: 1, width: vImagePixelCount(count), rowBytes: count * MemoryLayout<Float>.size)
+       vImageConvert_Planar16FtoPlanarF(&srcBuffer, &dstBuffer, 0)
+       
+       // Normalize the float buffer
+       let scale = (targetMax - targetMin) / (maxRange - minRange)
+       let offset = targetMin - minRange * scale
+       vDSP_vsmsa(floatBuffer, 1, [scale], [offset], &floatBuffer, 1, vDSP_Length(count))
+       
+       // Convert back to Float16
+       vImageConvert_PlanarFtoPlanar16F(&dstBuffer, &srcBuffer, 0)
+   }
+
+private func scaleFloatBuffer(_ buffer: inout [Float], from minRange: Float, to maxRange: Float, targetMin: Float, targetMax: Float) {
+    let scale = (targetMax - targetMin) / (maxRange - minRange)
+    let offset = targetMin - minRange * scale
+    vDSP_vsmsa(buffer, 1, [scale], [offset], &buffer, 1, vDSP_Length(buffer.count))
 }
 
 func create8Bit3ChannelPixelBuffer(width: Int, height: Int) -> CVPixelBuffer? {
@@ -115,24 +204,24 @@ func convertDepthBufferToHSV(pixelBuffer: CVPixelBuffer, outputPixelBuffer: CVPi
 
 func normalizedValueToHSVRGB(value: Float, min: Float = 0.0, max: Float = 1.0) -> (r: UInt8, g: UInt8, b: UInt8) {
     guard value >= min, value <= max else { return (0, 0, 0) } // Range check
-
+    
     // Normalize the value to a 0-1 range
     let normalizedValue = (value - min) / (max - min)
-
+    
     // Define the HSV values
     let h = normalizedValue * 360.0 // Hue range from 0 to 360 degrees
     let s: Float = 1.0 // Full saturation
     let v: Float = 1.0 // Full brightness
-
+    
     // Optimized HSV to RGB conversion
     let c = v * s
     let x = c * (1 - abs((h / 60.0).truncatingRemainder(dividingBy: 2) - 1))
     let m = v - c
-
+    
     var r: Float = 0, g: Float = 0, b: Float = 0
-
+    
     let hSegment = Int(h / 60.0) % 6
-
+    
     switch hSegment {
     case 0:
         r = c; g = x; b = 0
@@ -149,11 +238,11 @@ func normalizedValueToHSVRGB(value: Float, min: Float = 0.0, max: Float = 1.0) -
     default:
         break
     }
-
+    
     r += m
     g += m
     b += m
-
+    
     return (
         r: UInt8(r * 255.0),
         g: UInt8(g * 255.0),

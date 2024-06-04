@@ -9,8 +9,10 @@ import SwiftUI
 import WebRTC
 
 struct ConnectionView : View {
-    @EnvironmentObject private var webRTCSession: WebRTCSessionModel
-    @EnvironmentObject private var signalingClientSession: SignalingClientSessionModel
+    @EnvironmentObject private var webRTCSession: WebRTCSession
+    @EnvironmentObject private var signalingClientSession: SignalingClientSession
+    
+    var rtcSessionDidConnect: (RTCSessionDescription?) -> Void
     
     // @StateObject var depthPixelBufferChannel = CVPixelBufferDataChannel()
     // @StateObject var colorPixelBufferChannel = CVPixelBufferDataChannel()
@@ -30,7 +32,7 @@ struct ConnectionView : View {
             Divider()
             StatusIndicator(title: "Signaling Server Connected", status: self.signalingClientSession.isConnected)
             StatusIndicator(title: "Local SDP", status: self.signalingClientSession.localSdp != nil)
-            StatusIndicator(title: "Remote SDP", status: self.signalingClientSession.remoteSdp != nil)
+            StatusIndicator(title: "Remote SDP", status: self.signalingClientSession.remoteSdp != nil).onChange(of: signalingClientSession.remoteSdp, perform: rtcSessionDidConnect)
             Divider()
             VStack(alignment: .leading) {
                 Text("Local Candidate Count: \(self.signalingClientSession.localCandidates.count)")
@@ -47,6 +49,7 @@ struct ConnectionView : View {
             }
         }
         .padding([.all], 20)
+        
     }
 }
 

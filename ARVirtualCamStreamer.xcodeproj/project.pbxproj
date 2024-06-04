@@ -7,6 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C3A06D562C07F48E0094E050 /* ARCameraSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3A06D552C07F48E0094E050 /* ARCameraSession.swift */; };
+		C3A06D582C07F9AD0094E050 /* VideoPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3A06D572C07F9AD0094E050 /* VideoPreviewView.swift */; };
+		C3A06D5A2C07FF1F0094E050 /* DepthCameraSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3A06D592C07FF1F0094E050 /* DepthCameraSession.swift */; };
+		C3A06D632C093C020094E050 /* PointCloudMetalView.mm in Sources */ = {isa = PBXBuildFile; fileRef = C3A06D602C093C020094E050 /* PointCloudMetalView.mm */; };
+		C3A06D642C093C020094E050 /* AAPLTransforms.mm in Sources */ = {isa = PBXBuildFile; fileRef = C3A06D622C093C020094E050 /* AAPLTransforms.mm */; };
+		C3A06D6A2C093C410094E050 /* PointCloud.metal in Sources */ = {isa = PBXBuildFile; fileRef = C3A06D662C093C410094E050 /* PointCloud.metal */; };
+		C3A06D6B2C093C410094E050 /* Mixer.metal in Sources */ = {isa = PBXBuildFile; fileRef = C3A06D672C093C410094E050 /* Mixer.metal */; };
+		C3A06D6C2C093C410094E050 /* DepthToJET.metal in Sources */ = {isa = PBXBuildFile; fileRef = C3A06D682C093C410094E050 /* DepthToJET.metal */; };
+		C3A06D6D2C093C410094E050 /* PassThrough.metal in Sources */ = {isa = PBXBuildFile; fileRef = C3A06D692C093C410094E050 /* PassThrough.metal */; };
+		C3A06D6F2C0940D80094E050 /* PointCloudView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3A06D6E2C0940D80094E050 /* PointCloudView.swift */; };
+		C3A06D712C094C3C0094E050 /* FilterChain.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3A06D702C094C3C0094E050 /* FilterChain.swift */; };
 		C3B9BA912C07C0E500E4FFC8 /* ARVirtualCamStreamerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3B9BA902C07C0E500E4FFC8 /* ARVirtualCamStreamerApp.swift */; };
 		C3B9BA932C07C0E500E4FFC8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3B9BA922C07C0E500E4FFC8 /* ContentView.swift */; };
 		C3B9BA952C07C0E600E4FFC8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C3B9BA942C07C0E600E4FFC8 /* Assets.xcassets */; };
@@ -31,9 +42,11 @@
 		C3B9BADC2C07C59100E4FFC8 /* ConnectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3B9BADB2C07C59100E4FFC8 /* ConnectionView.swift */; };
 		C3B9BADF2C07C5F900E4FFC8 /* Buttons.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3B9BADE2C07C5F900E4FFC8 /* Buttons.swift */; };
 		C3B9BAE12C07C60B00E4FFC8 /* DataRateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3B9BAE02C07C60B00E4FFC8 /* DataRateView.swift */; };
-		C3B9BAE42C07CAAA00E4FFC8 /* WebRTCSessionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3B9BAE32C07CAAA00E4FFC8 /* WebRTCSessionModel.swift */; };
-		C3B9BAE62C07CE9400E4FFC8 /* SignalingClientSessionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3B9BAE52C07CE9400E4FFC8 /* SignalingClientSessionModel.swift */; };
+		C3B9BAE42C07CAAA00E4FFC8 /* WebRTCSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3B9BAE32C07CAAA00E4FFC8 /* WebRTCSession.swift */; };
+		C3B9BAE62C07CE9400E4FFC8 /* SignalingClientSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3B9BAE52C07CE9400E4FFC8 /* SignalingClientSession.swift */; };
 		C3B9BAE82C07DAF400E4FFC8 /* PixelBufferView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3B9BAE72C07DAF400E4FFC8 /* PixelBufferView.swift */; };
+		C3B9BAEA2C07DF6400E4FFC8 /* DepthCameraViewBasic.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3B9BAE92C07DF6400E4FFC8 /* DepthCameraViewBasic.swift */; };
+		C3B9BAEC2C07E0CB00E4FFC8 /* DepthCameraSessionBasic.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3B9BAEB2C07E0CB00E4FFC8 /* DepthCameraSessionBasic.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +67,20 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C3A06D552C07F48E0094E050 /* ARCameraSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARCameraSession.swift; sourceTree = "<group>"; };
+		C3A06D572C07F9AD0094E050 /* VideoPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPreviewView.swift; sourceTree = "<group>"; };
+		C3A06D592C07FF1F0094E050 /* DepthCameraSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepthCameraSession.swift; sourceTree = "<group>"; };
+		C3A06D5E2C093C020094E050 /* ARVirtualCamStreamer-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ARVirtualCamStreamer-Bridging-Header.h"; sourceTree = "<group>"; };
+		C3A06D5F2C093C020094E050 /* AAPLTransforms.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AAPLTransforms.h; sourceTree = "<group>"; };
+		C3A06D602C093C020094E050 /* PointCloudMetalView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PointCloudMetalView.mm; sourceTree = "<group>"; };
+		C3A06D612C093C020094E050 /* PointCloudMetalView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PointCloudMetalView.h; sourceTree = "<group>"; };
+		C3A06D622C093C020094E050 /* AAPLTransforms.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AAPLTransforms.mm; sourceTree = "<group>"; };
+		C3A06D662C093C410094E050 /* PointCloud.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = PointCloud.metal; sourceTree = "<group>"; };
+		C3A06D672C093C410094E050 /* Mixer.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = Mixer.metal; sourceTree = "<group>"; };
+		C3A06D682C093C410094E050 /* DepthToJET.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = DepthToJET.metal; sourceTree = "<group>"; };
+		C3A06D692C093C410094E050 /* PassThrough.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = PassThrough.metal; sourceTree = "<group>"; };
+		C3A06D6E2C0940D80094E050 /* PointCloudView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointCloudView.swift; sourceTree = "<group>"; };
+		C3A06D702C094C3C0094E050 /* FilterChain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterChain.swift; sourceTree = "<group>"; };
 		C3B9BA8D2C07C0E500E4FFC8 /* ARVirtualCamStreamer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ARVirtualCamStreamer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3B9BA902C07C0E500E4FFC8 /* ARVirtualCamStreamerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARVirtualCamStreamerApp.swift; sourceTree = "<group>"; };
 		C3B9BA922C07C0E500E4FFC8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -79,9 +106,12 @@
 		C3B9BADB2C07C59100E4FFC8 /* ConnectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionView.swift; sourceTree = "<group>"; };
 		C3B9BADE2C07C5F900E4FFC8 /* Buttons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Buttons.swift; sourceTree = "<group>"; };
 		C3B9BAE02C07C60B00E4FFC8 /* DataRateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataRateView.swift; sourceTree = "<group>"; };
-		C3B9BAE32C07CAAA00E4FFC8 /* WebRTCSessionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebRTCSessionModel.swift; sourceTree = "<group>"; };
-		C3B9BAE52C07CE9400E4FFC8 /* SignalingClientSessionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalingClientSessionModel.swift; sourceTree = "<group>"; };
+		C3B9BAE32C07CAAA00E4FFC8 /* WebRTCSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebRTCSession.swift; sourceTree = "<group>"; };
+		C3B9BAE52C07CE9400E4FFC8 /* SignalingClientSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalingClientSession.swift; sourceTree = "<group>"; };
 		C3B9BAE72C07DAF400E4FFC8 /* PixelBufferView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PixelBufferView.swift; sourceTree = "<group>"; };
+		C3B9BAE92C07DF6400E4FFC8 /* DepthCameraViewBasic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepthCameraViewBasic.swift; sourceTree = "<group>"; };
+		C3B9BAEB2C07E0CB00E4FFC8 /* DepthCameraSessionBasic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepthCameraSessionBasic.swift; sourceTree = "<group>"; };
+		C3B9BAED2C07E5A600E4FFC8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,6 +141,29 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C3A06D5B2C093B650094E050 /* PointCloud */ = {
+			isa = PBXGroup;
+			children = (
+				C3A06D5F2C093C020094E050 /* AAPLTransforms.h */,
+				C3A06D622C093C020094E050 /* AAPLTransforms.mm */,
+				C3A06D612C093C020094E050 /* PointCloudMetalView.h */,
+				C3A06D602C093C020094E050 /* PointCloudMetalView.mm */,
+			);
+			path = PointCloud;
+			sourceTree = "<group>";
+		};
+		C3A06D652C093C410094E050 /* Shaders */ = {
+			isa = PBXGroup;
+			children = (
+				C3A06D662C093C410094E050 /* PointCloud.metal */,
+				C3A06D672C093C410094E050 /* Mixer.metal */,
+				C3A06D682C093C410094E050 /* DepthToJET.metal */,
+				C3A06D692C093C410094E050 /* PassThrough.metal */,
+			);
+			name = Shaders;
+			path = ARVirtualCamStreamer/Shaders;
+			sourceTree = SOURCE_ROOT;
+		};
 		C3B9BA842C07C0E500E4FFC8 = {
 			isa = PBXGroup;
 			children = (
@@ -134,14 +187,18 @@
 		C3B9BA8F2C07C0E500E4FFC8 /* ARVirtualCamStreamer */ = {
 			isa = PBXGroup;
 			children = (
-				C3B9BAE22C07CA9000E4FFC8 /* Models */,
-				C3B9BACC2C07C41D00E4FFC8 /* Extensions */,
-				C3B9BAC32C07C3C500E4FFC8 /* Services */,
-				C3B9BABA2C07C0FF00E4FFC8 /* Views */,
+				C3A06D5E2C093C020094E050 /* ARVirtualCamStreamer-Bridging-Header.h */,
+				C3B9BAED2C07E5A600E4FFC8 /* Info.plist */,
 				C3B9BA902C07C0E500E4FFC8 /* ARVirtualCamStreamerApp.swift */,
-				C3B9BA942C07C0E600E4FFC8 /* Assets.xcassets */,
-				C3B9BA962C07C0E600E4FFC8 /* Preview Content */,
 				C3B9BAC12C07C38A00E4FFC8 /* Config.swift */,
+				C3B9BA942C07C0E600E4FFC8 /* Assets.xcassets */,
+				C3B9BACC2C07C41D00E4FFC8 /* Extensions */,
+				C3B9BAE22C07CA9000E4FFC8 /* Models */,
+				C3A06D5B2C093B650094E050 /* PointCloud */,
+				C3B9BA962C07C0E600E4FFC8 /* Preview Content */,
+				C3B9BAC32C07C3C500E4FFC8 /* Services */,
+				C3A06D652C093C410094E050 /* Shaders */,
+				C3B9BABA2C07C0FF00E4FFC8 /* Views */,
 			);
 			path = ARVirtualCamStreamer;
 			sourceTree = "<group>";
@@ -178,6 +235,9 @@
 				C3B9BA922C07C0E500E4FFC8 /* ContentView.swift */,
 				C3B9BADB2C07C59100E4FFC8 /* ConnectionView.swift */,
 				C3B9BAE72C07DAF400E4FFC8 /* PixelBufferView.swift */,
+				C3B9BAE92C07DF6400E4FFC8 /* DepthCameraViewBasic.swift */,
+				C3A06D572C07F9AD0094E050 /* VideoPreviewView.swift */,
+				C3A06D6E2C0940D80094E050 /* PointCloudView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -203,6 +263,7 @@
 				C3B9BAD12C07C44400E4FFC8 /* IceCandidate.swift */,
 				C3B9BACD2C07C44400E4FFC8 /* RTCStates.swift */,
 				C3B9BACF2C07C44400E4FFC8 /* SessionDescription.swift */,
+				C3A06D702C094C3C0094E050 /* FilterChain.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -219,8 +280,11 @@
 		C3B9BAE22C07CA9000E4FFC8 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				C3B9BAE32C07CAAA00E4FFC8 /* WebRTCSessionModel.swift */,
-				C3B9BAE52C07CE9400E4FFC8 /* SignalingClientSessionModel.swift */,
+				C3B9BAEB2C07E0CB00E4FFC8 /* DepthCameraSessionBasic.swift */,
+				C3B9BAE32C07CAAA00E4FFC8 /* WebRTCSession.swift */,
+				C3B9BAE52C07CE9400E4FFC8 /* SignalingClientSession.swift */,
+				C3A06D552C07F48E0094E050 /* ARCameraSession.swift */,
+				C3A06D592C07FF1F0094E050 /* DepthCameraSession.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -297,6 +361,7 @@
 				TargetAttributes = {
 					C3B9BA8C2C07C0E500E4FFC8 = {
 						CreatedOnToolsVersion = 15.0.1;
+						LastSwiftMigration = 1500;
 					};
 					C3B9BA9C2C07C0E600E4FFC8 = {
 						CreatedOnToolsVersion = 15.0.1;
@@ -364,23 +429,36 @@
 			buildActionMask = 2147483647;
 			files = (
 				C3B9BAE12C07C60B00E4FFC8 /* DataRateView.swift in Sources */,
+				C3A06D632C093C020094E050 /* PointCloudMetalView.mm in Sources */,
+				C3A06D6A2C093C410094E050 /* PointCloud.metal in Sources */,
 				C3B9BAD52C07C44400E4FFC8 /* FrameVideoCapturer.swift in Sources */,
 				C3B9BADC2C07C59100E4FFC8 /* ConnectionView.swift in Sources */,
 				C3B9BAC92C07C3FD00E4FFC8 /* SignalingClient.swift in Sources */,
 				C3B9BAD32C07C44400E4FFC8 /* CVPixelBuffer.swift in Sources */,
+				C3A06D6B2C093C410094E050 /* Mixer.metal in Sources */,
 				C3B9BA932C07C0E500E4FFC8 /* ContentView.swift in Sources */,
+				C3A06D5A2C07FF1F0094E050 /* DepthCameraSession.swift in Sources */,
+				C3A06D712C094C3C0094E050 /* FilterChain.swift in Sources */,
 				C3B9BAC82C07C3FD00E4FFC8 /* CVPixelBufferDataChannel.swift in Sources */,
+				C3A06D6F2C0940D80094E050 /* PointCloudView.swift in Sources */,
 				C3B9BAD92C07C46E00E4FFC8 /* NativeWebSocket.swift in Sources */,
-				C3B9BAE42C07CAAA00E4FFC8 /* WebRTCSessionModel.swift in Sources */,
+				C3B9BAE42C07CAAA00E4FFC8 /* WebRTCSession.swift in Sources */,
 				C3B9BADF2C07C5F900E4FFC8 /* Buttons.swift in Sources */,
 				C3B9BA912C07C0E500E4FFC8 /* ARVirtualCamStreamerApp.swift in Sources */,
+				C3A06D562C07F48E0094E050 /* ARCameraSession.swift in Sources */,
+				C3A06D6C2C093C410094E050 /* DepthToJET.metal in Sources */,
 				C3B9BAD42C07C44400E4FFC8 /* SessionDescription.swift in Sources */,
 				C3B9BAC22C07C38A00E4FFC8 /* Config.swift in Sources */,
+				C3B9BAEC2C07E0CB00E4FFC8 /* DepthCameraSessionBasic.swift in Sources */,
 				C3B9BACA2C07C3FD00E4FFC8 /* WebRTCClient.swift in Sources */,
+				C3A06D642C093C020094E050 /* AAPLTransforms.mm in Sources */,
 				C3B9BADA2C07C46E00E4FFC8 /* WebSocketProvider.swift in Sources */,
 				C3B9BAE82C07DAF400E4FFC8 /* PixelBufferView.swift in Sources */,
-				C3B9BAE62C07CE9400E4FFC8 /* SignalingClientSessionModel.swift in Sources */,
+				C3B9BAE62C07CE9400E4FFC8 /* SignalingClientSession.swift in Sources */,
+				C3A06D6D2C093C410094E050 /* PassThrough.metal in Sources */,
+				C3B9BAEA2C07DF6400E4FFC8 /* DepthCameraViewBasic.swift in Sources */,
 				C3B9BACB2C07C3FD00E4FFC8 /* Message.swift in Sources */,
+				C3A06D582C07F9AD0094E050 /* VideoPreviewView.swift in Sources */,
 				C3B9BAD22C07C44400E4FFC8 /* RTCStates.swift in Sources */,
 				C3B9BAD62C07C44400E4FFC8 /* IceCandidate.swift in Sources */,
 			);
@@ -543,18 +621,21 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ARVirtualCamStreamer/Preview Content\"";
 				DEVELOPMENT_TEAM = 9KKZGPATSJ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ARVirtualCamStreamer/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Stream color and depth data";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -563,6 +644,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = carlmoore.ARVirtualCamStreamer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "ARVirtualCamStreamer/ARVirtualCamStreamer-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -573,18 +656,21 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ARVirtualCamStreamer/Preview Content\"";
 				DEVELOPMENT_TEAM = 9KKZGPATSJ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ARVirtualCamStreamer/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Stream color and depth data";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -593,6 +679,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = carlmoore.ARVirtualCamStreamer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "ARVirtualCamStreamer/ARVirtualCamStreamer-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

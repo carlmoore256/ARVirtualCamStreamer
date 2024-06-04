@@ -7,23 +7,34 @@
 
 import SwiftUI
 import UIKit
+import SwiftUI
 
-struct PixelBufferView: UIViewRepresentable { // Use UIViewRepresentable
-    @ObservedObject var pixelBufferChannel: CVPixelBufferDataChannel
-
-    func makeUIView(context: Context) -> UIImageView { // Make a UIImageView
+struct PixelBufferView: UIViewRepresentable {
+    var pixelBuffer: CVPixelBuffer?
+    var scale: CGFloat = 1.0
+    var orientation: UIImage.Orientation = .right
+    var contentMode: UIView.ContentMode = .scaleAspectFit
+    var backgroundColor: UIColor = .black
+    var filter: ((CIImage) -> CIImage?)?
+    let context = CIContext()
+    
+    func makeUIView(context: Context) -> UIImageView {
         let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit // Adjust content mode as needed
+        imageView.backgroundColor = self.backgroundColor
+        imageView.contentMode = self.contentMode
+        imageView.clipsToBounds = true // Ensure the image doesn't overflow
         return imageView
     }
-
+    
     func updateUIView(_ uiView: UIImageView, context: Context) {
-        pixelBufferChannel.addBufferListener(id: "viewListener", listener: { pixelBuffer in
-            let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
-            let context = CIContext()
-            if let cgImage = context.createCGImage(ciImage, from: ciImage.extent) {
-                uiView.image = UIImage(cgImage: cgImage)
-            }
-        })
+        guard let pixelBuffer = pixelBuffer else { return }
+        var ciImage = CIImage(cvPixelBuffer: pixelBuffer)
+        if let filterFunc = filter {
+            ciImage = filterFunc(ciImage) ?? ciImage
+        }
+        if let cgImage = self.context.createCGImage(ciImage, from: ciImage.extent) {
+            let rotatedImage = UIImage(cgImage: cgImage, scale: scale, orientation: orientation)
+            uiView.image = rotatedImage
+        }
     }
 }
